@@ -328,14 +328,29 @@ section p {
     top: 0;
     right: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
 }
 
 .attendance-indicator.present {
     background-color: #10b981;
 }
 
+.attendance-indicator.on-leave {
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    font-size: 12px;
+}
+
+.attendance-indicator.on-leave::before {
+    content: '✈️';
+    display: block;
+}
+
 .attendance-indicator.absent {
-    background-color: #ef4444;
+    background-color: #fbbf24;
 }
 
 .card-body {

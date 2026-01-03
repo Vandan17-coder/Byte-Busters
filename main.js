@@ -183,13 +183,22 @@ filterBtns.forEach(btn => {
 function setRandomAttendanceStatus() {
     const indicators = document.querySelectorAll('.attendance-indicator');
     indicators.forEach(indicator => {
-        const isPresent = Math.random() > 0.5;
-        if (isPresent) {
-            indicator.classList.add('present');
-            indicator.title = 'Present';
-        } else {
-            indicator.classList.add('absent');
-            indicator.title = 'Absent';
+        const statuses = ['present', 'on-leave', 'absent'];
+        const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+        
+        // Remove all status classes
+        indicator.classList.remove('present', 'on-leave', 'absent');
+        
+        // Add the random status class
+        indicator.classList.add(randomStatus);
+        
+        // Set tooltip based on status
+        if (randomStatus === 'present') {
+            indicator.title = 'Present - Employee is in the office';
+        } else if (randomStatus === 'on-leave') {
+            indicator.title = 'On Leave - Employee is on leave';
+        } else if (randomStatus === 'absent') {
+            indicator.title = 'Absent - Employee has not applied time off and is absent';
         }
     });
 }
