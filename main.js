@@ -101,6 +101,8 @@ if (checkInBtn) {
         isCheckedIn = true;
         checkInTime = new Date();
         updateCheckInOutDisplay();
+        // Change icon color to green
+        iconCircle.style.backgroundColor = '#10b981';
     });
 }
 
@@ -110,6 +112,8 @@ if (checkOutBtn) {
         isCheckedIn = false;
         checkInTime = null;
         updateCheckInOutDisplay();
+        // Change icon color back to red
+        iconCircle.style.backgroundColor = '#e74c3c';
     });
 }
 
