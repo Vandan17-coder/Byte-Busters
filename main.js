@@ -34,14 +34,18 @@ document.addEventListener('click', function(e) {
 // Profile Dropdown Items Click Handlers
 const myProfileLink = document.querySelector('a[href="#myprofile"]');
 const logoutLink = document.querySelector('a[href="#logout"]');
+const profileModal = document.getElementById('profileModal');
+const profileClose = document.querySelector('.profile-close');
+const profileCloseBtn = document.getElementById('profileCloseBtn');
+const profileEditBtn = document.getElementById('profileEditBtn');
 
 if (myProfileLink) {
     myProfileLink.addEventListener('click', function(e) {
         e.preventDefault();
         profileContainer.classList.remove('active');
-        console.log('Navigating to My Profile');
-        // You can add navigation logic here
-        alert('My Profile page will open here');
+        // Open profile modal
+        profileModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
     });
 }
 
@@ -54,6 +58,42 @@ if (logoutLink) {
         alert('Logging out... See you soon!');
     });
 }
+
+// Profile Modal Close Handlers
+function closeProfileModal() {
+    profileModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+if (profileClose) {
+    profileClose.addEventListener('click', closeProfileModal);
+}
+
+if (profileCloseBtn) {
+    profileCloseBtn.addEventListener('click', closeProfileModal);
+}
+
+if (profileEditBtn) {
+    profileEditBtn.addEventListener('click', function() {
+        alert('Edit Profile functionality coming soon!');
+    });
+}
+
+// Close profile modal when clicking outside
+if (profileModal) {
+    profileModal.addEventListener('click', function(e) {
+        if (e.target === profileModal) {
+            closeProfileModal();
+        }
+    });
+}
+
+// Close profile modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && profileModal.classList.contains('show')) {
+        closeProfileModal();
+    }
+});
 
 // Icon click handlers
 const iconCircle = document.querySelector('.icon-circle');

@@ -252,6 +252,48 @@
         </div>
     </div>
 
+    <!-- Employee Profile Modal -->
+    <div id="profileModal" class="modal profile-modal">
+        <div class="modal-content profile-content">
+            <div class="modal-header profile-header">
+                <h2>My Profile</h2>
+                <span class="modal-close profile-close">&times;</span>
+            </div>
+            <div class="modal-body profile-body">
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label for="profileName">Name</label>
+                        <input type="text" id="profileName" class="form-input" placeholder="Enter your name" value="Rachit Patel">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="email" id="profileEmail" class="form-input" placeholder="Enter your email" value="rachit.patel@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePhone">Phone</label>
+                        <input type="tel" id="profilePhone" class="form-input" placeholder="Enter your phone" value="+1 (555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePosition">Position</label>
+                        <input type="text" id="profilePosition" class="form-input" placeholder="Enter your position" value="Senior Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileDepartment">Department</label>
+                        <input type="text" id="profileDepartment" class="form-input" placeholder="Enter your department" value="Engineering">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileBio">Bio</label>
+                        <textarea id="profileBio" class="form-textarea" placeholder="Enter your bio" rows="4">Passionate developer with 5+ years of experience in web development.</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer profile-footer">
+                <button id="profileCloseBtn" class="btn btn-secondary">Close</button>
+                <button id="profileEditBtn" class="btn btn-primary">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+
     <script src="main.js"></script>
 </body>
 </html>
