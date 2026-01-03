@@ -64,15 +64,90 @@ if (iconCircle) {
     });
 }
 
+// Random data generator for employee information
+function generateRandomEmployeeData() {
+    const positions = ['Software Engineer', 'Product Manager', 'Designer', 'Data Analyst', 'HR Manager', 'Sales Executive', 'DevOps Engineer', 'UX Designer'];
+    const departments = ['Engineering', 'Product', 'Design', 'Analytics', 'HR', 'Sales', 'Operations', 'Marketing'];
+    const statuses = ['Active', 'On Leave', 'Remote', 'Inactive'];
+    
+    const firstNames = ['John', 'Sarah', 'Michael', 'Emily', 'David', 'Jessica', 'Robert', 'Amanda'];
+    const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'];
+    
+    const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const randomPosition = positions[Math.floor(Math.random() * positions.length)];
+    const randomDepartment = departments[Math.floor(Math.random() * departments.length)];
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+    const randomPhone = `+1 (${Math.floor(Math.random() * 900) + 100}) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`;
+    const randomEmail = `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@company.com`;
+    
+    return {
+        name: `${randomFirstName} ${randomLastName}`,
+        position: randomPosition,
+        department: randomDepartment,
+        email: randomEmail,
+        phone: randomPhone,
+        status: randomStatus
+    };
+}
+
 // Employee Card Click Handler
 const employeeCards = document.querySelectorAll('.employee-card');
+const employeeModal = document.getElementById('employeeModal');
+const modalClose = document.querySelector('.modal-close');
+const modalCloseBtn = document.querySelector('.modal-close-btn');
+
 employeeCards.forEach(card => {
     card.addEventListener('click', function() {
         const employeeName = this.querySelector('.employee-name').textContent;
-        console.log('Clicked on employee:', employeeName);
-        // You can add modal or detail view functionality here
+        const employeeData = generateRandomEmployeeData();
+        
+        // Populate modal with data
+        document.getElementById('modalName').textContent = employeeName;
+        document.getElementById('modalPosition').textContent = employeeData.position;
+        document.getElementById('modalDepartment').textContent = employeeData.department;
+        document.getElementById('modalEmail').textContent = employeeData.email;
+        document.getElementById('modalPhone').textContent = employeeData.phone;
+        document.getElementById('modalStatus').textContent = employeeData.status;
+        
+        // Show modal
+        employeeModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
     });
 });
+
+// Close modal function
+function closeEmployeeModal() {
+    employeeModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+// Modal close button handlers
+if (modalClose) {
+    modalClose.addEventListener('click', closeEmployeeModal);
+}
+
+if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', closeEmployeeModal);
+}
+
+// Close modal when clicking outside
+if (employeeModal) {
+    employeeModal.addEventListener('click', function(e) {
+        if (e.target === employeeModal) {
+            closeEmployeeModal();
+        }
+    });
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && employeeModal.classList.contains('show')) {
+        closeEmployeeModal();
+    }
+});
+
+
 
 // Search Functionality
 const searchBox = document.querySelector('.search-box');
