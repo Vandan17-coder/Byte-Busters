@@ -117,6 +117,9 @@
                     <a href="#employees" class="nav-link">Employees</a>
                 </li>
                 <li class="nav-item">
+                    <a href="#admin" class="nav-link">Admin Dashboard</a>
+                </li>
+                <li class="nav-item">
                     <a href="#attendance" class="nav-link">Attendance</a>
                 </li>
                 <li class="nav-item">
@@ -257,6 +260,199 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Employee Name</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard Section -->
+        <section id="admin" style="display: none;">
+            <div class="admin-container">
+                <h2>Admin Dashboard</h2>
+                
+                <!-- Search Section -->
+                <div class="admin-search-section">
+                    <div class="admin-search-container">
+                        <input type="text" id="adminSearchInput" class="admin-search-input" placeholder="Search employee by name, ID, or department...">
+                        <button id="adminSearchBtn" class="admin-search-btn">🔍 Search</button>
+                    </div>
+                </div>
+
+                <!-- Employee Results -->
+                <div id="adminSearchResults" class="admin-search-results">
+                    <!-- Search results will appear here -->
+                </div>
+
+                <!-- Employee Details Section -->
+                <div id="adminEmployeeDetails" class="admin-employee-details" style="display: none;">
+                    <div class="admin-details-header">
+                        <div class="admin-employee-info">
+                            <img id="adminEmployeeAvatar" src="https://via.placeholder.com/100" alt="Employee" class="admin-employee-avatar">
+                            <div class="admin-employee-basic">
+                                <h3 id="adminEmployeeName">Employee Name</h3>
+                                <p id="adminEmployeePosition" class="admin-employee-position">Position</p>
+                                <p id="adminEmployeeId" class="admin-employee-id">ID: EMP-001</p>
+                            </div>
+                        </div>
+                        <button id="closeDetailsBtn" class="close-details-btn">✕</button>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" data-tab="resume">Resume</button>
+                        <button class="admin-tab" data-tab="private">Private Info</button>
+                        <button class="admin-tab" data-tab="salary">Salary Info</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="admin-tab-content">
+                        <!-- Resume Tab -->
+                        <div id="resumeTab" class="tab-pane active">
+                            <div class="info-section">
+                                <h4>Education</h4>
+                                <div class="info-item">
+                                    <label>Degree:</label>
+                                    <p id="adminDegree">Bachelor of Science in Computer Science</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>University:</label>
+                                    <p id="adminUniversity">State University</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Graduation Year:</label>
+                                    <p id="adminGradYear">2020</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <h4>Work Experience</h4>
+                                <div class="info-item">
+                                    <label>Previous Company:</label>
+                                    <p id="adminPrevCompany">Tech Corp Inc.</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Role:</label>
+                                    <p id="adminPrevRole">Junior Developer</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Years:</label>
+                                    <p id="adminYearsExp">2 years</p>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h4>Skills</h4>
+                                <div class="skills-container">
+                                    <span class="skill-tag">JavaScript</span>
+                                    <span class="skill-tag">React</span>
+                                    <span class="skill-tag">Node.js</span>
+                                    <span class="skill-tag">Python</span>
+                                    <span class="skill-tag">SQL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Private Info Tab -->
+                        <div id="privateTab" class="tab-pane">
+                            <div class="info-section">
+                                <h4>Contact Information</h4>
+                                <div class="info-item">
+                                    <label>Email:</label>
+                                    <p id="adminEmail">employee@company.com</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Phone:</label>
+                                    <p id="adminPhone">+1 (555) 123-4567</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Emergency Contact:</label>
+                                    <p id="adminEmergencyContact">+1 (555) 987-6543</p>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h4>Personal Details</h4>
+                                <div class="info-item">
+                                    <label>Date of Birth:</label>
+                                    <p id="adminDob">January 15, 1995</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Address:</label>
+                                    <p id="adminAddress">123 Main Street, City, State 12345</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Social Security:</label>
+                                    <p id="adminSsn">***-**-1234</p>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h4>Employment Details</h4>
+                                <div class="info-item">
+                                    <label>Start Date:</label>
+                                    <p id="adminStartDate">March 1, 2023</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Employment Type:</label>
+                                    <p id="adminEmpType">Full-Time</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Department:</label>
+                                    <p id="adminDepartment">Engineering</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Salary Info Tab -->
+                        <div id="salaryTab" class="tab-pane">
+                            <div class="info-section">
+                                <h4>Compensation</h4>
+                                <div class="info-item">
+                                    <label>Base Salary:</label>
+                                    <p id="adminBaseSalary" class="salary-amount">$85,000 / year</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Bonus:</label>
+                                    <p id="adminBonus" class="salary-amount">$5,000 / year</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Total Compensation:</label>
+                                    <p id="adminTotalComp" class="salary-amount total">$90,000 / year</p>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h4>Benefits</h4>
+                                <div class="info-item">
+                                    <label>Health Insurance:</label>
+                                    <p id="adminHealthIns">Premium Plan</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>401(k) Match:</label>
+                                    <p id="admin401k">5% Company Match</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>PTO Days:</label>
+                                    <p id="adminPto">20 days / year</p>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h4>Payment Schedule</h4>
+                                <div class="info-item">
+                                    <label>Pay Frequency:</label>
+                                    <p id="adminPayFreq">Bi-weekly</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Last Raise:</label>
+                                    <p id="adminLastRaise">January 2025</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Next Review:</label>
+                                    <p id="adminNextReview">January 2026</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
