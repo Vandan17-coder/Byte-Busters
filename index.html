@@ -106,7 +106,7 @@
         <div class="navbar-container">
             <!-- Company Logo -->
             <div class="navbar-logo">
-                <span class="logo-text">Company Logo</span>
+                <img src="https://via.placeholder.com/150x50?text=Company+Logo" alt="Company Logo" class="company-logo">
             </div>
 
             <!-- Navigation Menu -->
@@ -167,7 +167,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Altruistic Crab</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -179,7 +178,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Competent Salmon</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -191,7 +189,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Adorable Horn</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -203,7 +200,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Bold Hummingbird</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -215,7 +211,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Employee Name</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -227,7 +222,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Employee Name</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -239,7 +233,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Employee Name</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -251,7 +244,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Employee Name</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
 
@@ -263,7 +255,6 @@
                     </div>
                     <div class="card-body">
                         <p class="employee-name">Employee Name</p>
-                        <p class="employee-info">Employee Name</p>
                     </div>
                 </div>
             </div>
@@ -342,6 +333,48 @@
                     <p id="checkInTimeDisplay" class="action-label">Since 00:00PM</p>
                     <button id="checkOutBtn" class="action-btn">Check Out <span class="arrow">→</span></button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Profile Modal -->
+    <div id="profileModal" class="modal profile-modal">
+        <div class="modal-content profile-content">
+            <div class="modal-header profile-header">
+                <h2>My Profile</h2>
+                <span class="modal-close profile-close">&times;</span>
+            </div>
+            <div class="modal-body profile-body">
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label for="profileName">Name</label>
+                        <input type="text" id="profileName" class="form-input" placeholder="Enter your name" value="Rachit Patel" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email <span class="required-asterisk">*</span></label>
+                        <input type="email" id="profileEmail" class="form-input editable" placeholder="Enter your email" value="rachit.patel@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePhone">Phone <span class="required-asterisk">*</span></label>
+                        <input type="tel" id="profilePhone" class="form-input editable" placeholder="Enter your phone" value="+1 (555) 123-4567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePosition">Position</label>
+                        <input type="text" id="profilePosition" class="form-input" placeholder="Enter your position" value="Senior Developer" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileDepartment">Department</label>
+                        <input type="text" id="profileDepartment" class="form-input" placeholder="Enter your department" value="Engineering" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileBio">Bio</label>
+                        <textarea id="profileBio" class="form-textarea editable" placeholder="Enter your bio" rows="4">Passionate developer with 5+ years of experience in web development.</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer profile-footer">
+                <button id="profileCloseBtn" class="btn btn-secondary">Close</button>
+                <button id="profileEditBtn" class="btn btn-primary">Edit Profile</button>
             </div>
         </div>
     </div>
