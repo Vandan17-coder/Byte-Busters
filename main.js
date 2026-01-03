@@ -12,6 +12,9 @@ const switchToLogin = document.getElementById('switchToLogin');
 const logoFileInput = document.getElementById('logo');
 const logoFileName = document.getElementById('logoFileName');
 
+// Store logged-in employee information
+let loggedInEmployee = null;
+
 // Sample employee credentials (in real app, this would be server-side)
 let validCredentials = [
     { username: 'admin', password: 'admin123' },
@@ -128,6 +131,9 @@ if (loginForm) {
             // Clear error message
             errorMessage.classList.remove('show');
             errorMessage.textContent = '';
+            
+            // Store logged-in employee information
+            loggedInEmployee = username;
             
             // Hide login modal and show dashboard
             loginModal.classList.remove('show');
@@ -512,4 +518,455 @@ function setRandomAttendanceStatus() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     setRandomAttendanceStatus();
+    initializeAttendancePage();
+    initializeTimeOffForm();
 });
+
+// Initialize attendance page
+function initializeAttendancePage() {
+    const attendanceTableBody = document.getElementById('attendanceTableBody');
+    const attendanceMonth = document.getElementById('attendanceMonth');
+    const saveAttendanceBtn = document.getElementById('saveAttendance');
+    
+    if (!attendanceTableBody) return;
+    
+    // Set current month as default
+    const today = new Date();
+    const monthString = today.toISOString().split('T')[0].substring(0, 7);
+    if (attendanceMonth) {
+        attendanceMonth.value = monthString;
+    }
+    
+    // Load attendance for current month
+    loadMonthlyAttendance(monthString);
+    
+    if (attendanceMonth) {
+        attendanceMonth.addEventListener('change', function() {
+            loadMonthlyAttendance(this.value);
+        });
+    }
+    
+    if (saveAttendanceBtn) {
+        saveAttendanceBtn.addEventListener('click', saveAttendance);
+    }
+}
+
+// Load monthly attendance
+function loadMonthlyAttendance(monthString) {
+    const attendanceTableBody = document.getElementById('attendanceTableBody');
+    if (!attendanceTableBody) return;
+    
+    // Get the logged-in employee
+    const loggedInEmp = loggedInEmployee 
+        ? employeeList.find(emp => emp.username === loggedInEmployee)
+        : null;
+    
+    if (!loggedInEmp) return;
+    
+    const [year, month] = monthString.split('-');
+    const daysInMonth = new Date(year, month, 0).getDate();
+    
+    attendanceTableBody.innerHTML = '';
+    
+    let totalWorkingDays = 0;
+    let leaveCount = 0;
+    
+    // Generate attendance rows for each day of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${month}-${String(day).padStart(2, '0')}`;
+        const dateObj = new Date(year, month - 1, day);
+        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+        
+        // Skip weekends
+        if (dayName === 'Sat' || dayName === 'Sun') continue;
+        
+        totalWorkingDays++;
+        
+        const data = attendanceData[`${loggedInEmp.id}_${dateStr}`] || {};
+        const checkIn = data.checkIn || '';
+        const checkOut = data.checkOut || '';
+        const status = data.status || 'absent';
+        
+        if (status === 'leave') {
+            leaveCount++;
+        }
+        
+        // Calculate work hours
+        let workHours = 0;
+        let extraHours = 0;
+        
+        if (checkIn && checkOut && status === 'present') {
+            workHours = calculateHours(checkIn, checkOut);
+            extraHours = Math.max(0, workHours - 8);
+            workHours = workHours.toFixed(2);
+            extraHours = extraHours.toFixed(2);
+        }
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${dateStr}</td>
+            <td>
+                <span class="editable-time" data-key="${loggedInEmp.id}_${dateStr}_checkin">${checkIn || '--:--'}</span>
+            </td>
+            <td>
+                <span class="editable-time" data-key="${loggedInEmp.id}_${dateStr}_checkout">${checkOut || '--:--'}</span>
+            </td>
+            <td>${status === 'present' ? workHours : '-'}</td>
+            <td>${status === 'present' ? extraHours : '-'}</td>
+            <td>
+                <select class="status-select" data-key="${loggedInEmp.id}_${dateStr}">
+                    <option value="present" ${status === 'present' ? 'selected' : ''}>Present</option>
+                    <option value="absent" ${status === 'absent' ? 'selected' : ''}>Absent</option>
+                    <option value="leave" ${status === 'leave' ? 'selected' : ''}>Leave</option>
+                </select>
+            </td>
+        `;
+        
+        attendanceTableBody.appendChild(row);
+    }
+    
+    // Update monthly stats
+    document.getElementById('totalWorkingDays').textContent = totalWorkingDays;
+    document.getElementById('leaveCount').textContent = leaveCount;
+    
+    // Add event listeners
+    addEditableTimeListeners();
+    addStatusSelectListeners();
+}
+
+// Calculate hours between two times
+function calculateHours(checkIn, checkOut) {
+    const [inHour, inMin] = checkIn.split(':').map(Number);
+    const [outHour, outMin] = checkOut.split(':').map(Number);
+    
+    const inTime = inHour * 60 + inMin;
+    const outTime = outHour * 60 + outMin;
+    
+    const diffMinutes = outTime - inTime;
+    return diffMinutes / 60;
+}
+
+// Add event listeners for editable times
+function addEditableTimeListeners() {
+    document.querySelectorAll('.editable-time').forEach(element => {
+        element.addEventListener('click', function() {
+            const key = this.getAttribute('data-key');
+            const currentValue = this.textContent;
+            
+            const input = document.createElement('input');
+            input.type = 'time';
+            input.className = 'time-input';
+            input.value = currentValue === '--:--' ? '' : currentValue;
+            
+            this.replaceWith(input);
+            input.focus();
+            
+            function saveTime() {
+                const value = input.value;
+                const span = document.createElement('span');
+                span.className = 'editable-time';
+                span.setAttribute('data-key', key);
+                span.textContent = value || '--:--';
+                
+                input.replaceWith(span);
+                
+                // Store the value
+                const [empId, dateStr, type] = key.split('_');
+                const dataKey = `${empId}_${dateStr}`;
+                attendanceData[dataKey] = attendanceData[dataKey] || {};
+                
+                if (type === 'checkin') {
+                    attendanceData[dataKey].checkIn = value;
+                } else {
+                    attendanceData[dataKey].checkOut = value;
+                }
+                
+                // Recalculate work hours
+                const month = dateStr.substring(0, 7);
+                loadMonthlyAttendance(month);
+                
+                addEditableTimeListeners();
+                addStatusSelectListeners();
+            }
+            
+            input.addEventListener('blur', saveTime);
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') saveTime();
+                if (e.key === 'Escape') {
+                    const span = document.createElement('span');
+                    span.className = 'editable-time';
+                    span.setAttribute('data-key', key);
+                    span.textContent = currentValue;
+                    input.replaceWith(span);
+                    addEditableTimeListeners();
+                }
+            });
+        });
+    });
+}
+
+// Add event listeners for status select
+function addStatusSelectListeners() {
+    document.querySelectorAll('.status-select').forEach(select => {
+        select.addEventListener('change', function() {
+            const key = this.getAttribute('data-key');
+            const status = this.value;
+            
+            const [empId, dateStr] = key.split('_');
+            attendanceData[key] = attendanceData[key] || {};
+            attendanceData[key].status = status;
+            
+            // If status is leave or absent, clear times
+            if (status === 'leave' || status === 'absent') {
+                attendanceData[key].checkIn = '';
+                attendanceData[key].checkOut = '';
+            }
+            
+            // Recalculate work hours
+            const month = dateStr.substring(0, 7);
+            loadMonthlyAttendance(month);
+            
+            addEditableTimeListeners();
+            addStatusSelectListeners();
+        });
+    });
+}
+
+// ===== ATTENDANCE PAGE FUNCTIONALITY =====
+
+// Employee data for attendance
+const employeeList = [
+    { id: 1, name: 'Altruistic Crab', position: 'Senior Developer', username: 'altruistic' },
+    { id: 2, name: 'Competent Salmon', position: 'Product Manager', username: 'competent' },
+    { id: 3, name: 'Adorable Horn', position: 'UI Designer', username: 'adorable' },
+    { id: 4, name: 'Bold Hummingbird', position: 'Data Analyst', username: 'bold' },
+    { id: 5, name: 'Employee Name', position: 'QA Engineer', username: 'employee' },
+    { id: 6, name: 'Employee Name', position: 'DevOps Engineer', username: 'devops' },
+    { id: 7, name: 'Employee Name', position: 'HR Manager', username: 'admin' },
+    { id: 8, name: 'Employee Name', position: 'Sales Executive', username: 'sales' },
+    { id: 9, name: 'Employee Name', position: 'Marketing Specialist', username: 'marketing' }
+];
+
+// Attendance data storage
+let attendanceData = {};
+
+// Populate attendance table
+function populateAttendanceTable() {
+    // Deprecated - use loadMonthlyAttendance instead
+}
+
+// Add event listeners to checkboxes
+function addCheckboxListeners() {
+    // Deprecated - use addStatusSelectListeners instead
+}
+
+// Mark all employees as present
+function markAllPresent() {
+    // Deprecated
+}
+
+// Clear all attendance
+function clearAllAttendance() {
+    // Deprecated
+}
+
+// Update summary statistics
+function updateSummary() {
+    // Deprecated
+}
+
+// Load attendance data for a specific date
+function loadAttendanceData(date) {
+    // Deprecated - use loadMonthlyAttendance instead
+}
+
+// Save attendance to local storage
+function saveAttendance() {
+    const attendanceMonth = document.getElementById('attendanceMonth');
+    const monthValue = attendanceMonth ? attendanceMonth.value : new Date().toISOString().split('T')[0].substring(0, 7);
+    
+    localStorage.setItem(`attendance_${monthValue}`, JSON.stringify(attendanceData));
+    alert('Attendance saved successfully for ' + monthValue);
+}
+
+// ===== TIME OFF FORM FUNCTIONALITY =====
+
+function initializeTimeOffForm() {
+    const timeoffForm = document.getElementById('timeoffForm');
+    const employeeNameField = document.getElementById('employeeName');
+    const startDateField = document.getElementById('startDate');
+    const endDateField = document.getElementById('endDate');
+    const durationField = document.getElementById('duration');
+    const documentInput = document.getElementById('document');
+    const fileNameDisplay = document.getElementById('fileName');
+    
+    // Auto-fill employee name
+    if (employeeNameField && loggedInEmployee) {
+        const employeeName = loggedInEmployee.charAt(0).toUpperCase() + loggedInEmployee.slice(1);
+        employeeNameField.value = employeeName;
+    }
+    
+    // Calculate duration when dates change
+    if (startDateField && endDateField && durationField) {
+        function calculateDuration() {
+            const startDate = new Date(startDateField.value);
+            const endDate = new Date(endDateField.value);
+            
+            if (startDateField.value && endDateField.value && startDate <= endDate) {
+                const timeDiff = endDate - startDate;
+                const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+                durationField.value = dayDiff + ' days';
+            } else {
+                durationField.value = '';
+            }
+        }
+        
+        startDateField.addEventListener('change', calculateDuration);
+        endDateField.addEventListener('change', calculateDuration);
+    }
+    
+    // Handle file upload
+    if (documentInput && fileNameDisplay) {
+        documentInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Check file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    fileNameDisplay.textContent = 'No file chosen';
+                    return;
+                }
+                fileNameDisplay.textContent = '✓ ' + file.name;
+            }
+        });
+        
+        // Drag and drop
+        const fileUploadLabel = document.querySelector('.file-upload-label');
+        if (fileUploadLabel) {
+            fileUploadLabel.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#3b82f6';
+                this.style.backgroundColor = '#eff6ff';
+            });
+            
+            fileUploadLabel.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#ddd';
+                this.style.backgroundColor = '#f9fafb';
+            });
+            
+            fileUploadLabel.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#ddd';
+                this.style.backgroundColor = '#f9fafb';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    documentInput.files = files;
+                    const event = new Event('change', { bubbles: true });
+                    documentInput.dispatchEvent(event);
+                }
+            });
+        }
+    }
+    
+    // Handle form submission
+    if (timeoffForm) {
+        timeoffForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitTimeOffRequest();
+        });
+    }
+    
+    // Load and display time off history
+    loadTimeOffHistory();
+}
+
+function submitTimeOffRequest() {
+    const formData = {
+        employeeName: document.getElementById('employeeName').value,
+        timeoffType: document.getElementById('timeoffType').value,
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        duration: document.getElementById('duration').value,
+        allocationPeriod: document.getElementById('allocationPeriod').value,
+        reason: document.getElementById('reason').value,
+        hasDocument: document.getElementById('document').files.length > 0,
+        documentName: document.getElementById('document').files.length > 0 ? document.getElementById('document').files[0].name : '',
+        status: 'pending',
+        submittedDate: new Date().toLocaleDateString()
+    };
+    
+    // Validate required fields
+    if (!formData.employeeName || !formData.timeoffType || !formData.startDate || 
+        !formData.endDate || !formData.allocationPeriod || !formData.reason) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    // Check if document is required (for sick leave)
+    if (formData.timeoffType === 'sick' && !formData.hasDocument) {
+        alert('Medical certificate or document is required for sick leave');
+        return;
+    }
+    
+    // Save to localStorage
+    const timeoffRequests = JSON.parse(localStorage.getItem('timeoffRequests')) || [];
+    timeoffRequests.push(formData);
+    localStorage.setItem('timeoffRequests', JSON.stringify(timeoffRequests));
+    
+    // Show success message
+    alert('Time off request submitted successfully!');
+    
+    // Reset form
+    document.getElementById('timeoffForm').reset();
+    document.getElementById('fileName').textContent = 'No file chosen';
+    
+    // Reload history
+    loadTimeOffHistory();
+}
+
+function loadTimeOffHistory() {
+    const historyContainer = document.getElementById('timeoffHistoryContainer');
+    if (!historyContainer) return;
+    
+    const timeoffRequests = JSON.parse(localStorage.getItem('timeoffRequests')) || [];
+    
+    // Filter requests for current logged-in employee
+    const employeeName = loggedInEmployee ? 
+        (loggedInEmployee.charAt(0).toUpperCase() + loggedInEmployee.slice(1)) : '';
+    
+    const filteredRequests = timeoffRequests.filter(req => req.employeeName === employeeName);
+    
+    historyContainer.innerHTML = '';
+    
+    if (filteredRequests.length === 0) {
+        historyContainer.innerHTML = '<tr><td colspan="5" class="empty-message">No time off requests yet</td></tr>';
+        return;
+    }
+    
+    filteredRequests.reverse().forEach((request) => {
+        const typeLabel = {
+            'paid': 'Paid Leave',
+            'unpaid': 'Unpaid Leave',
+            'sick': 'Sick Leave'
+        }[request.timeoffType] || request.timeoffType;
+        
+        const statusClass = `status-${request.status}`;
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${request.employeeName}</td>
+            <td>${request.startDate}</td>
+            <td>${request.endDate}</td>
+            <td>${typeLabel}</td>
+            <td>
+                <span class="status-badge ${statusClass}">${request.status}</span>
+            </td>
+        `;
+        
+        historyContainer.appendChild(row);
+    });
+}
+
