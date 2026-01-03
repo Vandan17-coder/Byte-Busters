@@ -129,6 +129,15 @@ if (loginForm) {
             errorMessage.classList.remove('show');
             errorMessage.textContent = '';
             
+            // Check if admin credentials - redirect to admin page
+            if (username === 'admin' && password === 'admin123') {
+                window.location.href = 'admin.html';
+                return;
+            }
+            
+            // Store logged-in employee information
+            loggedInEmployee = username;
+            
             // Hide login modal and show dashboard
             loginModal.classList.remove('show');
             loginModal.classList.add('hidden');
