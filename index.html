@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Byte Busters - Employee Management</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="attendance.css">
+    <link rel="stylesheet" href="timeoff.css">
 </head>
 <body>
     <!-- Login Modal -->
@@ -261,13 +263,154 @@
         </section>
 
         <section id="attendance">
-            <h2>Attendance</h2>
-            <p>Track and monitor employee attendance records.</p>
+            <div class="attendance-header">
+                <div class="attendance-title">
+                    <h2>Attendance</h2>
+                </div>
+                <div class="attendance-controls">
+                    <input type="month" id="attendanceMonth" class="attendance-month-input">
+                </div>
+            </div>
+
+            <div class="attendance-table-container">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Work Hours</th>
+                            <th>Extra Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody">
+                        <!-- Attendance rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="monthly-stats">
+                <div class="stat-item">
+                    <label>Total Working Days:</label>
+                    <span id="totalWorkingDays">0</span>
+                </div>
+                <div class="stat-item">
+                    <label>Leave Count:</label>
+                    <span id="leaveCount">0</span>
+                </div>
+            </div>
+
+            <div class="attendance-actions">
+                <p class="attendance-note">Click on check-in or check-out times to edit them.</p>
+                <button id="saveAttendance" class="btn btn-primary">Save Changes</button>
+            </div>
         </section>
 
         <section id="timeoff">
-            <h2>Timeoff</h2>
-            <p>Manage employee time off requests and schedules.</p>
+            <div class="timeoff-header">
+                <h2>Time Off Request</h2>
+                <p class="timeoff-subtitle">Submit a request for paid leave, unpaid leave, or sick leave</p>
+            </div>
+
+            <div class="timeoff-container">
+                <form id="timeoffForm" class="timeoff-form">
+                    <!-- Employee Name (Auto-filled) -->
+                    <div class="form-group">
+                        <label for="employeeName">Employee Name <span class="required">*</span></label>
+                        <input type="text" id="employeeName" name="employeeName" class="form-input" placeholder="Your name" readonly>
+                    </div>
+
+                    <!-- Time Off Type -->
+                    <div class="form-group">
+                        <label for="timeoffType">Time Off Type <span class="required">*</span></label>
+                        <select id="timeoffType" name="timeoffType" class="form-input" required>
+                            <option value="">Select a type...</option>
+                            <option value="paid">Paid Leave</option>
+                            <option value="unpaid">Unpaid Leave</option>
+                            <option value="sick">Sick Leave</option>
+                        </select>
+                    </div>
+
+                    <!-- Start Date -->
+                    <div class="form-group">
+                        <label for="startDate">Start Date <span class="required">*</span></label>
+                        <input type="date" id="startDate" name="startDate" class="form-input" required>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="form-group">
+                        <label for="endDate">End Date <span class="required">*</span></label>
+                        <input type="date" id="endDate" name="endDate" class="form-input" required>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="form-group">
+                        <label for="duration">Duration (Days)</label>
+                        <input type="text" id="duration" name="duration" class="form-input" placeholder="Auto-calculated" readonly>
+                    </div>
+
+                    <!-- Allocation Period -->
+                    <div class="form-group">
+                        <label for="allocationPeriod">Allocation Period <span class="required">*</span></label>
+                        <select id="allocationPeriod" name="allocationPeriod" class="form-input" required>
+                            <option value="">Select period...</option>
+                            <option value="full_day">Full Day</option>
+                            <option value="half_day_first">Half Day (First Half)</option>
+                            <option value="half_day_second">Half Day (Second Half)</option>
+                        </select>
+                    </div>
+
+                    <!-- Reason -->
+                    <div class="form-group">
+                        <label for="reason">Reason for Time Off <span class="required">*</span></label>
+                        <textarea id="reason" name="reason" class="form-textarea" placeholder="Provide details for your time off request" rows="4" required></textarea>
+                    </div>
+
+                    <!-- Document Upload -->
+                    <div class="form-group">
+                        <label for="document">Upload Document</label>
+                        <p class="document-info">Required for sick leave. Optional for other types. (PDF, JPG, PNG - Max 5MB)</p>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="document" name="document" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+                            <label for="document" class="file-upload-label">
+                                <span class="upload-icon">📎</span>
+                                <span class="upload-text">Click to upload or drag and drop</span>
+                            </label>
+                            <span id="fileName" class="file-name">No file chosen</span>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">Clear</button>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Time Off History -->
+            <div class="timeoff-history">
+                <h3>Your Time Off Requests</h3>
+                <div class="timeoff-table-container">
+                    <table class="timeoff-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timeoffHistoryContainer">
+                            <tr>
+                                <td colspan="5" class="empty-message">No time off requests yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
     </main>
 
