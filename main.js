@@ -58,11 +58,86 @@ if (logoutLink) {
 // Icon click handlers
 const iconCircle = document.querySelector('.icon-circle');
 
+// Check In / Check Out Modal Elements
+let checkInTime = null;
+let isCheckedIn = false;
+
+const checkInOutModal = document.getElementById('checkInOutModal');
+const checkinClose = document.querySelector('.checkin-close');
+const checkInBtn = document.getElementById('checkInBtn');
+const checkOutBtn = document.getElementById('checkOutBtn');
+const checkInAction = document.getElementById('checkInAction');
+const checkOutAction = document.getElementById('checkOutAction');
+const checkInTimeDisplay = document.getElementById('checkInTimeDisplay');
+
 if (iconCircle) {
     iconCircle.addEventListener('click', function() {
-        console.log('Circle icon clicked');
+        checkInOutModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        updateCheckInOutDisplay();
     });
 }
+
+// Update check-in/out display
+function updateCheckInOutDisplay() {
+    if (isCheckedIn) {
+        checkInAction.style.display = 'none';
+        checkOutAction.style.display = 'block';
+        if (checkInTime) {
+            const hours = String(checkInTime.getHours() % 12 || 12).padStart(2, '0');
+            const minutes = String(checkInTime.getMinutes()).padStart(2, '0');
+            const ampm = checkInTime.getHours() >= 12 ? 'PM' : 'AM';
+            checkInTimeDisplay.textContent = `Since ${hours}:${minutes}${ampm}`;
+        }
+    } else {
+        checkInAction.style.display = 'block';
+        checkOutAction.style.display = 'none';
+    }
+}
+
+// Check In button
+if (checkInBtn) {
+    checkInBtn.addEventListener('click', function() {
+        isCheckedIn = true;
+        checkInTime = new Date();
+        updateCheckInOutDisplay();
+    });
+}
+
+// Check Out button
+if (checkOutBtn) {
+    checkOutBtn.addEventListener('click', function() {
+        isCheckedIn = false;
+        checkInTime = null;
+        updateCheckInOutDisplay();
+    });
+}
+
+// Close modal function
+function closeCheckInOutModal() {
+    checkInOutModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+if (checkinClose) {
+    checkinClose.addEventListener('click', closeCheckInOutModal);
+}
+
+// Close modal when clicking outside
+if (checkInOutModal) {
+    checkInOutModal.addEventListener('click', function(e) {
+        if (e.target === checkInOutModal) {
+            closeCheckInOutModal();
+        }
+    });
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && checkInOutModal.classList.contains('show')) {
+        closeCheckInOutModal();
+    }
+});
 
 // Random data generator for employee information
 function generateRandomEmployeeData() {

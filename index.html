@@ -232,6 +232,26 @@
         </div>
     </div>
 
+    <!-- Check In / Check Out Modal -->
+    <div id="checkInOutModal" class="modal checkin-modal">
+        <div class="modal-content checkin-content">
+            <div class="checkin-header">
+                <p id="employeeName" class="checkin-employee-name">Rachit Patel</p>
+                <span class="modal-close checkin-close">&times;</span>
+            </div>
+            <div class="checkin-body">
+                <div id="checkInAction" class="action-card checkin-card">
+                    <p class="action-label">Check IN <span class="arrow">→</span></p>
+                    <button id="checkInBtn" class="action-btn">Check In</button>
+                </div>
+                <div id="checkOutAction" class="action-card checkout-card" style="display: none;">
+                    <p id="checkInTimeDisplay" class="action-label">Since 00:00PM</p>
+                    <button id="checkOutBtn" class="action-btn">Check Out <span class="arrow">→</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="main.js"></script>
 </body>
 </html>
