@@ -13,12 +13,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Profile Dropdown Menu
-const profileIcon = document.querySelector('.profile-icon');
+const profileAvatar = document.querySelector('.profile-avatar');
 const profileContainer = document.querySelector('.profile-container');
 const profileDropdown = document.querySelector('.profile-dropdown');
 
-if (profileIcon) {
-    profileIcon.addEventListener('click', function(e) {
+if (profileAvatar) {
+    profileAvatar.addEventListener('click', function(e) {
         e.stopPropagation();
         profileContainer.classList.toggle('active');
     });

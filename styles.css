@@ -108,18 +108,20 @@ body {
     position: relative;
 }
 
-.profile-icon {
-    width: 35px;
-    height: 25px;
-    background-color: #5dade2;
-    border-radius: 3px;
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
+    border: 2px solid white;
+    object-fit: cover;
 }
 
-.profile-icon:hover {
+.profile-avatar:hover {
     transform: scale(1.1);
-    background-color: #2980b9;
+    border-color: #5dade2;
+    box-shadow: 0 0 8px rgba(93, 173, 226, 0.4);
 }
 
 .profile-dropdown {
