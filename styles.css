@@ -5,20 +5,21 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background-color: #f3f4f6;
+    color: #1f2937;
+    min-height: 100vh;
 }
 
 /* Navigation Bar Styles */
 .navbar {
     background-color: #ffffff;
-    padding: 0.8rem 0;
+    padding: 1rem 0;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .navbar-container {
@@ -67,18 +68,18 @@ body {
 }
 
 .nav-link {
-    color: #333;
+    color: #374151;
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
-    padding: 0.5rem 0;
-    transition: color 0.3s ease;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
     border-bottom: 2px solid transparent;
 }
 
 .nav-link:hover {
-    color: #3498db;
-    border-bottom: 2px solid #3498db;
+    color: #1f2937;
+    border-bottom: 2px solid #1f2937;
 }
 
 /* Right Side Icons */
@@ -89,16 +90,22 @@ body {
 }
 
 .icon-circle {
-    width: 30px;
-    height: 30px;
-    background-color: #e74c3c;
+    width: 36px;
+    height: 36px;
+    background-color: #dc2626;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
 }
 
 .icon-circle:hover {
-    transform: scale(1.1);
+    background-color: #b91c1c;
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
 }
 
 /* Profile Container and Dropdown */
@@ -107,19 +114,20 @@ body {
 }
 
 .profile-avatar {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2.5px solid #667eea;
     object-fit: cover;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
 .profile-avatar:hover {
-    transform: scale(1.1);
-    border-color: #5dade2;
-    box-shadow: 0 0 8px rgba(93, 173, 226, 0.4);
+    transform: scale(1.15);
+    border-color: #764ba2;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
 }
 
 .profile-dropdown {
@@ -182,17 +190,20 @@ body {
 }
 
 section {
-    background-color: white;
-    padding: 2rem;
+    background: #ffffff;
+    padding: 2.5rem;
     margin: 1.5rem 0;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
 }
 
 section h2 {
-    color: #2c3e50;
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 section p {
@@ -262,17 +273,19 @@ section p {
 
 .search-box {
     width: 100%;
-    padding: 0.7rem 1rem;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
+    padding: 0.8rem 1.2rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
     font-size: 0.9rem;
-    transition: border-color 0.3s ease;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
 }
 
 .search-box:focus {
     outline: none;
-    border-color: #8b5cf6;
-    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background-color: #ffffff;
 }
 
 /* Employee Grid */
@@ -284,19 +297,37 @@ section p {
 
 /* Employee Card */
 .employee-card {
-    background-color: #ffffff;
-    border: 2px solid #e0e0e0;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.employee-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #3b82f6;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.employee-card:hover::before {
+    transform: scaleX(1);
 }
 
 .employee-card:hover {
-    border-color: #8b5cf6;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
-    transform: translateY(-5px);
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
 }
 
 .card-header {
@@ -311,34 +342,42 @@ section p {
     width: 80px;
     height: 80px;
     border-radius: 8px;
-    background-color: #e0e0e0;
-    border: 2px solid #d0d0d0;
+    background-color: #e5e7eb;
+    border: 2px solid #d1d5db;
     object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+}
+
+.employee-card:hover .employee-avatar {
+    transform: scale(1.03);
 }
 
 .attendance-indicator {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    border: 2px solid #ffffff;
-    background-color: #e0e0e0;
+    border: 3px solid #ffffff;
+    background-color: #e5e7eb;
     position: absolute;
-    top: 0;
-    right: 20px;
+    top: -5px;
+    right: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
+    transition: all 0.2s ease;
 }
 
 .attendance-indicator.present {
     background-color: #10b981;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
 .attendance-indicator.on-leave {
     background-color: transparent;
-    border: 2px solid #ffffff;
+    border: 3px solid #ffffff;
     font-size: 12px;
 }
 
@@ -352,14 +391,15 @@ section p {
 }
 
 .card-body {
-    padding: 1rem 0;
+    padding: 1.25rem 0;
 }
 
 .employee-name {
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0;
+    font-size: 1.05rem;
+    letter-spacing: 0.3px;
 }
 
 .employee-info {
@@ -754,42 +794,29 @@ section p {
 
 .form-input,
 .form-textarea {
-    padding: 0.75rem 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
     font-size: 1rem;
     font-family: inherit;
-    transition: all 0.3s ease;
-    color: #333;
-    background-color: #f8f9fa;
+    transition: all 0.2s ease;
+    color: #374151;
+    background-color: #ffffff;
 }
 
 .form-input[readonly],
 .form-textarea[readonly] {
-    background-color: #e8e8e8;
-    color: #666;
+    background-color: #f3f4f6;
+    color: #6b7280;
     cursor: not-allowed;
-    border-color: #d0d0d0;
-}
-
-.form-input[readonly]:focus,
-.form-textarea[readonly]:focus {
-    outline: none;
-    box-shadow: none;
-    border-color: #d0d0d0;
-    background-color: #e8e8e8;
-}
-
-.form-input.editable,
-.form-textarea.editable {
-    background-color: #ffffff;
+    border-color: #e5e7eb;
 }
 
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     background-color: #ffffff;
 }
 
@@ -809,32 +836,34 @@ section p {
 }
 
 .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.85rem 1.75rem;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.95rem;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #3b82f6;
     color: white;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    background-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .btn-secondary {
-    background-color: #e0e0e0;
-    color: #333;
+    background-color: #ef4444;
+    color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #d0d0d0;
+    background-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .btn:active {
