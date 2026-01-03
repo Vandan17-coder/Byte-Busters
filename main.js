@@ -102,13 +102,27 @@ employeeCards.forEach(card => {
         const employeeName = this.querySelector('.employee-name').textContent;
         const employeeData = generateRandomEmployeeData();
         
+        // Get attendance indicator status from the card
+        const attendanceIndicator = this.querySelector('.attendance-indicator');
+        let statusText = 'Active';
+        
+        if (attendanceIndicator) {
+            if (attendanceIndicator.classList.contains('present')) {
+                statusText = 'Present';
+            } else if (attendanceIndicator.classList.contains('on-leave')) {
+                statusText = 'On Leave';
+            } else if (attendanceIndicator.classList.contains('absent')) {
+                statusText = 'Absent';
+            }
+        }
+        
         // Populate modal with data
         document.getElementById('modalName').textContent = employeeName;
         document.getElementById('modalPosition').textContent = employeeData.position;
         document.getElementById('modalDepartment').textContent = employeeData.department;
         document.getElementById('modalEmail').textContent = employeeData.email;
         document.getElementById('modalPhone').textContent = employeeData.phone;
-        document.getElementById('modalStatus').textContent = employeeData.status;
+        document.getElementById('modalStatus').textContent = statusText;
         
         // Show modal
         employeeModal.classList.add('show');
