@@ -760,6 +760,27 @@ section p {
     background-color: #f8f9fa;
 }
 
+.form-input[readonly],
+.form-textarea[readonly] {
+    background-color: #e8e8e8;
+    color: #666;
+    cursor: not-allowed;
+    border-color: #d0d0d0;
+}
+
+.form-input[readonly]:focus,
+.form-textarea[readonly]:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #d0d0d0;
+    background-color: #e8e8e8;
+}
+
+.form-input.editable,
+.form-textarea.editable {
+    background-color: #ffffff;
+}
+
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
