@@ -1,3 +1,176 @@
+// Login and Signup Elements
+const loginForm = document.getElementById('loginForm');
+const loginModal = document.getElementById('loginModal');
+const signupForm = document.getElementById('signupForm');
+const signupModal = document.getElementById('signupModal');
+const errorMessage = document.getElementById('errorMessage');
+const signupErrorMessage = document.getElementById('signupErrorMessage');
+const navbar = document.getElementById('navbar');
+const mainContent = document.getElementById('mainContent');
+const switchToSignup = document.getElementById('switchToSignup');
+const switchToLogin = document.getElementById('switchToLogin');
+const logoFileInput = document.getElementById('logo');
+const logoFileName = document.getElementById('logoFileName');
+
+// Sample employee credentials (in real app, this would be server-side)
+let validCredentials = [
+    { username: 'admin', password: 'admin123' },
+    { username: 'employee', password: 'emp123' },
+    { username: 'user', password: 'password' }
+];
+
+// Switch to Signup form
+if (switchToSignup) {
+    switchToSignup.addEventListener('click', function(e) {
+        e.preventDefault();
+        loginModal.classList.remove('show');
+        loginModal.classList.add('hidden');
+        signupModal.classList.add('show');
+    });
+}
+
+// Switch to Login form
+if (switchToLogin) {
+    switchToLogin.addEventListener('click', function(e) {
+        e.preventDefault();
+        signupModal.classList.remove('show');
+        loginModal.classList.add('show');
+    });
+}
+
+// Logo file input handler
+if (logoFileInput) {
+    logoFileInput.addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name || 'No file chosen';
+        logoFileName.textContent = fileName;
+    });
+}
+
+// Signup form submission
+if (signupForm) {
+    signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const companyName = document.getElementById('companyName').value.trim();
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('signupEmail').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const logoFile = logoFileInput.files[0];
+        
+        // Clear error message
+        signupErrorMessage.classList.remove('show');
+        signupErrorMessage.textContent = '';
+        
+        // Validation
+        let errorMsg = '';
+        
+        if (!companyName) {
+            errorMsg = 'Company name is required';
+        } else if (!fullName) {
+            errorMsg = 'Full name is required';
+        } else if (!email || !email.includes('@')) {
+            errorMsg = 'Valid email is required';
+        } else if (!phone || phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+            errorMsg = 'Phone number must be exactly 10 digits';
+        } else if (password.length < 6) {
+            errorMsg = 'Password must be at least 6 characters';
+        } else if (password !== confirmPassword) {
+            errorMsg = 'Passwords do not match';
+        } else if (!logoFile) {
+            errorMsg = 'Please upload a company logo';
+        }
+        
+        if (errorMsg) {
+            signupErrorMessage.textContent = errorMsg;
+            signupErrorMessage.classList.add('show');
+            return;
+        }
+        
+        // Add new user to credentials
+        const newUsername = email.split('@')[0]; // Use email prefix as username
+        validCredentials.push({
+            username: newUsername,
+            password: password,
+            companyName: companyName,
+            fullName: fullName,
+            email: email,
+            phone: phone
+        });
+        
+        // Show success message
+        signupErrorMessage.classList.remove('show');
+        alert(`Account created successfully!\nYou can now login with username: ${newUsername}`);
+        
+        // Reset form and switch to login
+        signupForm.reset();
+        logoFileName.textContent = 'No file chosen';
+        signupModal.classList.remove('show');
+        loginModal.classList.add('show');
+    });
+}
+
+// Login validation
+if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        // Validate credentials
+        const isValid = validCredentials.some(cred => 
+            cred.username === username && cred.password === password
+        );
+        
+        if (isValid) {
+            // Clear error message
+            errorMessage.classList.remove('show');
+            errorMessage.textContent = '';
+            
+            // Hide login modal and show dashboard
+            loginModal.classList.remove('show');
+            loginModal.classList.add('hidden');
+            navbar.style.display = 'block';
+            mainContent.style.display = 'block';
+            document.body.style.overflow = 'auto';
+            
+            // Update employee name in check-in modal
+            const employeeNameDisplay = document.getElementById('employeeName');
+            if (employeeNameDisplay) {
+                employeeNameDisplay.textContent = username.charAt(0).toUpperCase() + username.slice(1);
+            }
+            
+            // Clear form
+            loginForm.reset();
+        } else {
+            // Show error message
+            errorMessage.textContent = 'Invalid Credentials';
+            errorMessage.classList.add('show');
+            document.getElementById('password').value = '';
+        }
+    });
+}
+
+// Password show/hide toggle
+document.querySelectorAll('.password-toggle').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('data-target');
+        const passwordField = document.getElementById(targetId);
+        
+        if (passwordField) {
+            const isPassword = passwordField.type === 'password';
+            passwordField.type = isPassword ? 'text' : 'password';
+            
+            // Update eye icon
+            this.classList.toggle('showing');
+        }
+    });
+});
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
