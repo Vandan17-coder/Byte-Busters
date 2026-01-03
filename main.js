@@ -12,19 +12,55 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Profile Dropdown Menu
+const profileIcon = document.querySelector('.profile-icon');
+const profileContainer = document.querySelector('.profile-container');
+const profileDropdown = document.querySelector('.profile-dropdown');
+
+if (profileIcon) {
+    profileIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileContainer.classList.toggle('active');
+    });
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    if (profileContainer && !profileContainer.contains(e.target)) {
+        profileContainer.classList.remove('active');
+    }
+});
+
+// Profile Dropdown Items Click Handlers
+const myProfileLink = document.querySelector('a[href="#myprofile"]');
+const logoutLink = document.querySelector('a[href="#logout"]');
+
+if (myProfileLink) {
+    myProfileLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        profileContainer.classList.remove('active');
+        console.log('Navigating to My Profile');
+        // You can add navigation logic here
+        alert('My Profile page will open here');
+    });
+}
+
+if (logoutLink) {
+    logoutLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        profileContainer.classList.remove('active');
+        console.log('User logging out');
+        // You can add logout logic here
+        alert('Logging out... See you soon!');
+    });
+}
+
 // Icon click handlers
 const iconCircle = document.querySelector('.icon-circle');
-const iconRectangle = document.querySelector('.icon-rectangle');
 
 if (iconCircle) {
     iconCircle.addEventListener('click', function() {
         console.log('Circle icon clicked');
-    });
-}
-
-if (iconRectangle) {
-    iconRectangle.addEventListener('click', function() {
-        console.log('Rectangle icon clicked');
     });
 }
 
