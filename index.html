@@ -186,6 +186,72 @@
         </section>
     </main>
 
+    <!-- Employee Information Modal -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Employee Information</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="employee-detail-container">
+                    <div class="employee-avatar-section">
+                        <img id="modalAvatar" src="https://via.placeholder.com/120?text=Employee" alt="Employee" class="modal-avatar">
+                    </div>
+                    <div class="employee-details-section">
+                        <div class="detail-item">
+                            <label>Name:</label>
+                            <p id="modalName" class="detail-value">-</p>
+                        </div>
+                        <div class="detail-item">
+                            <label>Position:</label>
+                            <p id="modalPosition" class="detail-value">-</p>
+                        </div>
+                        <div class="detail-item">
+                            <label>Department:</label>
+                            <p id="modalDepartment" class="detail-value">-</p>
+                        </div>
+                        <div class="detail-item">
+                            <label>Email:</label>
+                            <p id="modalEmail" class="detail-value">-</p>
+                        </div>
+                        <div class="detail-item">
+                            <label>Phone:</label>
+                            <p id="modalPhone" class="detail-value">-</p>
+                        </div>
+                        <div class="detail-item">
+                            <label>Status:</label>
+                            <p id="modalStatus" class="detail-value">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check In / Check Out Modal -->
+    <div id="checkInOutModal" class="modal checkin-modal">
+        <div class="modal-content checkin-content">
+            <div class="checkin-header">
+                <p id="employeeName" class="checkin-employee-name">Rachit Patel</p>
+                <span class="modal-close checkin-close">&times;</span>
+            </div>
+            <div class="checkin-body">
+                <div id="checkInAction" class="action-card checkin-card">
+                    <p class="action-label">Check IN <span class="arrow">→</span></p>
+                    <button id="checkInBtn" class="action-btn">Check In</button>
+                </div>
+                <div id="checkOutAction" class="action-card checkout-card" style="display: none;">
+                    <p id="checkInTimeDisplay" class="action-label">Since 00:00PM</p>
+                    <button id="checkOutBtn" class="action-btn">Check Out <span class="arrow">→</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="main.js"></script>
 </body>
 </html>

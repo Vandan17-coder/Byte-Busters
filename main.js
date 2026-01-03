@@ -58,21 +58,189 @@ if (logoutLink) {
 // Icon click handlers
 const iconCircle = document.querySelector('.icon-circle');
 
+// Check In / Check Out Modal Elements
+let checkInTime = null;
+let isCheckedIn = false;
+
+const checkInOutModal = document.getElementById('checkInOutModal');
+const checkinClose = document.querySelector('.checkin-close');
+const checkInBtn = document.getElementById('checkInBtn');
+const checkOutBtn = document.getElementById('checkOutBtn');
+const checkInAction = document.getElementById('checkInAction');
+const checkOutAction = document.getElementById('checkOutAction');
+const checkInTimeDisplay = document.getElementById('checkInTimeDisplay');
+
 if (iconCircle) {
     iconCircle.addEventListener('click', function() {
-        console.log('Circle icon clicked');
+        checkInOutModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        updateCheckInOutDisplay();
     });
+}
+
+// Update check-in/out display
+function updateCheckInOutDisplay() {
+    if (isCheckedIn) {
+        checkInAction.style.display = 'none';
+        checkOutAction.style.display = 'block';
+        if (checkInTime) {
+            const hours = String(checkInTime.getHours() % 12 || 12).padStart(2, '0');
+            const minutes = String(checkInTime.getMinutes()).padStart(2, '0');
+            const ampm = checkInTime.getHours() >= 12 ? 'PM' : 'AM';
+            checkInTimeDisplay.textContent = `Since ${hours}:${minutes}${ampm}`;
+        }
+    } else {
+        checkInAction.style.display = 'block';
+        checkOutAction.style.display = 'none';
+    }
+}
+
+// Check In button
+if (checkInBtn) {
+    checkInBtn.addEventListener('click', function() {
+        isCheckedIn = true;
+        checkInTime = new Date();
+        updateCheckInOutDisplay();
+        // Change icon color to green
+        iconCircle.style.backgroundColor = '#10b981';
+    });
+}
+
+// Check Out button
+if (checkOutBtn) {
+    checkOutBtn.addEventListener('click', function() {
+        isCheckedIn = false;
+        checkInTime = null;
+        updateCheckInOutDisplay();
+        // Change icon color back to red
+        iconCircle.style.backgroundColor = '#e74c3c';
+    });
+}
+
+// Close modal function
+function closeCheckInOutModal() {
+    checkInOutModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+if (checkinClose) {
+    checkinClose.addEventListener('click', closeCheckInOutModal);
+}
+
+// Close modal when clicking outside
+if (checkInOutModal) {
+    checkInOutModal.addEventListener('click', function(e) {
+        if (e.target === checkInOutModal) {
+            closeCheckInOutModal();
+        }
+    });
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && checkInOutModal.classList.contains('show')) {
+        closeCheckInOutModal();
+    }
+});
+
+// Random data generator for employee information
+function generateRandomEmployeeData() {
+    const positions = ['Software Engineer', 'Product Manager', 'Designer', 'Data Analyst', 'HR Manager', 'Sales Executive', 'DevOps Engineer', 'UX Designer'];
+    const departments = ['Engineering', 'Product', 'Design', 'Analytics', 'HR', 'Sales', 'Operations', 'Marketing'];
+    const statuses = ['Active', 'On Leave', 'Remote', 'Inactive'];
+    
+    const firstNames = ['John', 'Sarah', 'Michael', 'Emily', 'David', 'Jessica', 'Robert', 'Amanda'];
+    const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'];
+    
+    const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const randomPosition = positions[Math.floor(Math.random() * positions.length)];
+    const randomDepartment = departments[Math.floor(Math.random() * departments.length)];
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+    const randomPhone = `+1 (${Math.floor(Math.random() * 900) + 100}) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`;
+    const randomEmail = `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@company.com`;
+    
+    return {
+        name: `${randomFirstName} ${randomLastName}`,
+        position: randomPosition,
+        department: randomDepartment,
+        email: randomEmail,
+        phone: randomPhone,
+        status: randomStatus
+    };
 }
 
 // Employee Card Click Handler
 const employeeCards = document.querySelectorAll('.employee-card');
+const employeeModal = document.getElementById('employeeModal');
+const modalClose = document.querySelector('.modal-close');
+const modalCloseBtn = document.querySelector('.modal-close-btn');
+
 employeeCards.forEach(card => {
     card.addEventListener('click', function() {
         const employeeName = this.querySelector('.employee-name').textContent;
-        console.log('Clicked on employee:', employeeName);
-        // You can add modal or detail view functionality here
+        const employeeData = generateRandomEmployeeData();
+        
+        // Get attendance indicator status from the card
+        const attendanceIndicator = this.querySelector('.attendance-indicator');
+        let statusText = 'Active';
+        
+        if (attendanceIndicator) {
+            if (attendanceIndicator.classList.contains('present')) {
+                statusText = 'Present';
+            } else if (attendanceIndicator.classList.contains('on-leave')) {
+                statusText = 'On Leave';
+            } else if (attendanceIndicator.classList.contains('absent')) {
+                statusText = 'Absent';
+            }
+        }
+        
+        // Populate modal with data
+        document.getElementById('modalName').textContent = employeeName;
+        document.getElementById('modalPosition').textContent = employeeData.position;
+        document.getElementById('modalDepartment').textContent = employeeData.department;
+        document.getElementById('modalEmail').textContent = employeeData.email;
+        document.getElementById('modalPhone').textContent = employeeData.phone;
+        document.getElementById('modalStatus').textContent = statusText;
+        
+        // Show modal
+        employeeModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
     });
 });
+
+// Close modal function
+function closeEmployeeModal() {
+    employeeModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+// Modal close button handlers
+if (modalClose) {
+    modalClose.addEventListener('click', closeEmployeeModal);
+}
+
+if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', closeEmployeeModal);
+}
+
+// Close modal when clicking outside
+if (employeeModal) {
+    employeeModal.addEventListener('click', function(e) {
+        if (e.target === employeeModal) {
+            closeEmployeeModal();
+        }
+    });
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && employeeModal.classList.contains('show')) {
+        closeEmployeeModal();
+    }
+});
+
+
 
 // Search Functionality
 const searchBox = document.querySelector('.search-box');
@@ -108,13 +276,22 @@ filterBtns.forEach(btn => {
 function setRandomAttendanceStatus() {
     const indicators = document.querySelectorAll('.attendance-indicator');
     indicators.forEach(indicator => {
-        const isPresent = Math.random() > 0.5;
-        if (isPresent) {
-            indicator.classList.add('present');
-            indicator.title = 'Present';
-        } else {
-            indicator.classList.add('absent');
-            indicator.title = 'Absent';
+        const statuses = ['present', 'on-leave', 'absent'];
+        const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+        
+        // Remove all status classes
+        indicator.classList.remove('present', 'on-leave', 'absent');
+        
+        // Add the random status class
+        indicator.classList.add(randomStatus);
+        
+        // Set tooltip based on status
+        if (randomStatus === 'present') {
+            indicator.title = 'Present - Employee is in the office';
+        } else if (randomStatus === 'on-leave') {
+            indicator.title = 'On Leave - Employee is on leave';
+        } else if (randomStatus === 'absent') {
+            indicator.title = 'Absent - Employee has not applied time off and is absent';
         }
     });
 }
